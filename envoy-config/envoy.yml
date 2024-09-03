@@ -36,7 +36,7 @@ static_resources:
                   name: local_route
                   virtual_hosts:
                     - name: backend_service
-                      domains: ["*"]
+                      domains: ["api.skrao.net"]
                       routes:
                         - match: { prefix: "/" }
                           direct_response:
@@ -60,7 +60,7 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: 192.168.86.191
+                      address: 127.0.0.1
                       port_value: 3001
 
 admin:
