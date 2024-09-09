@@ -54,22 +54,32 @@ func (aSvc *AuthSvc) validateToken(token string) error {
 		Token: token,
 	}
 
+	var ( 
+		req *http.Request
+		resp *http.Response
+		err error
+	)
 	reqBodyBuffer := new(bytes.Buffer)
 	if err := json.NewEncoder(reqBodyBuffer).Encode(authRequest); err != nil {
 		log.Println("failed to construct json request ", err)
 		return err
 	}
 
-	req, err := http.NewRequest("POST", aSvc.authServerUrl, reqBodyBuffer)
+	req, err = http.NewRequest("POST", aSvc.authServerUrl, reqBodyBuffer)
 
 	if err != nil {
 		log.Println("failed to construct request ", err)
 		return err
 	}
 
-	if _, err := aSvc.httpClient.Do(req); err != nil {
+	if resp, err = aSvc.httpClient.Do(req); err != nil {
 		log.Println("failed to authorized ", err)
 		return err
+	}
+
+	if resp.StatusCode!= 200 {
+		log.Println("token authorization failed, http status code ", resp.StatusCode)
+		return fmt.Errorf("auth server failed to authorize token, downstream status code %d", resp.StatusCode)
 	}
 
 	return nil

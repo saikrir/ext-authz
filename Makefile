@@ -22,6 +22,10 @@ clean:
 run:
 	go run $(MAIN_FILE)
 
+deploy-ext-authz: build-api
+	scp $(BUILD_PATH)/$(PROJECT_NAME) skrao@api.skrao.net:~/Dev/apis/extauth/
+	$(call clean)
+
 deploy-envoy:
 	scp ./envoy-config/envoy.yml skrao@api.skrao.net:~/Dev/apis/envoy-proxy/
 
