@@ -22,5 +22,8 @@ clean:
 run:
 	go run $(MAIN_FILE)
 
+deploy-envoy:
+	scp ./envoy-config/envoy.yml skrao@api.skrao.net:~/Dev/apis/envoy-proxy/
+
 lint:
 	$(HOME)/go/bin/golangci-lint run
